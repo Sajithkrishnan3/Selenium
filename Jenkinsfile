@@ -10,12 +10,18 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-                sh '/opt/homebrew/Cellar/maven/3.9.16/bin/mvn clean test'
-            }
-        }
+stage('Build') {
+    steps {
+        sh '''
+            echo "JAVA_HOME=$JAVA_HOME"
+            which java
+            java -version
+            which javac
+            javac -version
+            /opt/homebrew/Cellar/maven/3.9.16/bin/mvn clean test
+        '''
     }
+}
 
     post {
         always {
