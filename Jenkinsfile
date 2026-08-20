@@ -12,7 +12,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean test'
+                sh '/opt/homebrew/Cellar/maven/3.9.16/bin/mvn clean test'
             }
         }
     }
