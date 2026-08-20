@@ -3,25 +3,24 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
+        stage('Build') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/Sajithkrishnan3/Selenium.git'
+                sh '''
+                    export JAVA_HOME=$(/usr/libexec/java_home -v 26)
+                    export PATH="$JAVA_HOME/bin:/opt/homebrew/Cellar/maven/3.9.16/bin:$PATH"
+
+                    echo "Java version:"
+                    java -version
+
+                    echo "Maven version:"
+                    mvn -version
+
+                    echo "Running Maven tests:"
+                    mvn clean test
+                '''
             }
         }
-
-stage('Build') {
-    steps {
-        sh '''
-            echo "JAVA_HOME=$JAVA_HOME"
-            which java
-            java -version
-            which javac
-            javac -version
-            /opt/homebrew/Cellar/maven/3.9.16/bin/mvn clean test
-        '''
     }
-}
 
     post {
         always {
