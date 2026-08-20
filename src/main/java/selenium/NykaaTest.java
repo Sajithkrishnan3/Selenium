@@ -1,5 +1,7 @@
 package selenium;
 
+
+
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
@@ -12,98 +14,67 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+
+
 public class NykaaTest {
 
     public static void main(String[] args) throws InterruptedException {
 
-        // ==========================================
-        // 1. Start Chrome
-        // ==========================================
-
+        
         WebDriver driver = new ChromeDriver();
+        
 
         driver.manage().window().maximize();
+        
 
-        WebDriverWait wait =
-                new WebDriverWait(driver, Duration.ofSeconds(15));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
 
-        // ==========================================
-        // 2. Open Nykaa
-        // ==========================================
-
+        
+                
         driver.get("https://www.nykaa.com/");
 
         System.out.println("Nykaa opened");
 
 
-        // ==========================================
-        // 3. Search Kurtis
-        // ==========================================
-
-        WebElement searchBox = wait.until(
-                ExpectedConditions.elementToBeClickable(
-                        By.xpath("//input[@placeholder='Search on Nykaa']")
-                )
-        );
+       
+        WebElement searchBox = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@placeholder='Search on Nykaa']")));
 
         searchBox.click();
         searchBox.clear();
         searchBox.sendKeys("Kurtis");
         searchBox.sendKeys(Keys.ENTER);
 
-        wait.until(
-                ExpectedConditions.urlContains("catalogsearch/result")
-        );
+        wait.until(ExpectedConditions.urlContains("catalogsearch/result"));
 
-        System.out.println(
-                "Search URL: " + driver.getCurrentUrl()
-        );
+        System.out.println("Search URL: " + driver.getCurrentUrl());
 
-
-        // ==========================================
-        // 4. Close notification popup
-        // ==========================================
+        //  Close notification popup
 
         try {
 
-            WebElement noThanks = new WebDriverWait(
-                    driver,
-                    Duration.ofSeconds(5)
-            ).until(
+            WebElement noThanks = new WebDriverWait(driver, Duration.ofSeconds(5)).until(
                     ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[normalize-space()='No thanks']")
-                    )
-            );
+                            By.xpath("//button[normalize-space()='No thanks']")));
 
             noThanks.click();
 
-            System.out.println(
-                    "Notification popup closed"
-            );
+            System.out.println("Notification popup closed");
 
         } catch (Exception e) {
 
-            System.out.println(
-                    "No notification popup"
-            );
+            System.out.println("No notification popup");
         }
 
 
-        // ==========================================
-        // 5. Save Search Window
-        // ==========================================
+        // Save Search Window
 
         String searchWindow = driver.getWindowHandle();
 
-        System.out.println(
-                "Search window: " + searchWindow
-        );
+        System.out.println("Search window: " + searchWindow);
 
 
-        // ==========================================
-        // 6. Select Product
-        // ==========================================
+        //  Select Product
 
         WebElement product = wait.until(
                 ExpectedConditions.elementToBeClickable(
@@ -113,23 +84,15 @@ public class NykaaTest {
 
         product.click();
 
-        System.out.println(
-                "Product clicked"
-        );
+        System.out.println("Product clicked");
 
 
-        // ==========================================
-        // 7. Wait for Product Window
-        // ==========================================
+        //  Wait for Product Window
 
-        wait.until(
-                ExpectedConditions.numberOfWindowsToBe(2)
-        );
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
 
 
-        // ==========================================
-        // 8. Switch to Product Window
-        // ==========================================
+        // Switch to Product Window
 
         Set<String> windows = driver.getWindowHandles();
 
@@ -143,14 +106,10 @@ public class NykaaTest {
             }
         }
 
-        System.out.println(
-                "Product URL: " + driver.getCurrentUrl()
-        );
+        System.out.println("Product URL: " + driver.getCurrentUrl());
 
 
-        // ==========================================
-        // 9. Get Product Name
-        // ==========================================
+        //  Get Product Name
 
         WebElement productNameElement = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
@@ -160,14 +119,10 @@ public class NykaaTest {
 
         String productName = productNameElement.getText();
 
-        System.out.println(
-                "Product Name: " + productName
-        );
+        System.out.println("Product Name: " + productName);
 
 
-        // ==========================================
-        // 10. Get Product Price
-        // ==========================================
+        //  Get Product Price
 
         List<WebElement> priceElements = driver.findElements(
                 By.xpath("//*[normalize-space()='₹480']")
@@ -196,15 +151,11 @@ public class NykaaTest {
         }
 
 
-        // ==========================================
-        // 11. Convert Price to Number
-        // ==========================================
+        // Convert Price to Number
 
         if (priceText == null) {
 
-            System.out.println(
-                    "Price was not found!"
-            );
+            System.out.println("Price was not found!");
 
         } else {
 
@@ -216,29 +167,21 @@ public class NykaaTest {
             double price =
                     Double.parseDouble(cleanPrice);
 
-            System.out.println(
-                    "Price as number: " + price
-            );
+            System.out.println("Price as number: " + price);
 
 
-            // ==========================================
-            // 12. Save Product to MySQL
-            // ==========================================
+            //  Save Product to MySQL
 
             MySqlConnection.saveProduct(
                     productName,
                     price
             );
 
-            System.out.println(
-                    "Nykaa product saved to MySQL!"
-            );
+            System.out.println("Nykaa product saved to MySQL!");
         }
 
 
-        // ==========================================
-        // 13. Select Size M
-        // ==========================================
+        //  Select Size M
 
         WebElement sizeM = wait.until(
                 ExpectedConditions.elementToBeClickable(
@@ -250,58 +193,35 @@ public class NykaaTest {
 
         sizeM.click();
 
-        System.out.println(
-                "Size M selected"
-        );
+        System.out.println("Size M selected");
 
 
-        // ==========================================
-        // 14. Add Product to Bag
-        // ==========================================
+        //  Add Product to Bag
 
         WebElement addToBag = wait.until(
                 ExpectedConditions.elementToBeClickable(
-                        By.xpath(
-                                "//button[@data-at='add-to-bag']"
-                        )
-                )
+                        By.xpath("//button[@data-at='add-to-bag']"))
         );
 
         addToBag.click();
 
-        System.out.println(
-                "Add to Bag clicked"
-        );
+        System.out.println("Add to Bag clicked");
 
 
-        // ==========================================
-        // 15. Wait for Add to Bag
-        // ==========================================
+        //  Wait for Add to Bag
 
         Thread.sleep(2000);
 
 
-        // ==========================================
-        // 16. Open Cart
-        // ==========================================
-
-        /*
-         * Stay in the product window.
-         * Directly navigate to the cart.
-         */
-
-        driver.get(
-                "https://www.nykaafashion.com/?showCart=1"
-        );
-
-        System.out.println(
-                "Navigated to cart"
-        );
+        // Open Cart
 
 
-        // ==========================================
-        // 17. Wait for Cart Page
-        // ==========================================
+        driver.get("https://www.nykaafashion.com/?showCart=1");
+
+        System.out.println("Navigated to cart");
+
+
+        //  Wait for Cart Page
 
         wait.until(
                 ExpectedConditions.presenceOfElementLocated(
@@ -312,27 +232,18 @@ public class NykaaTest {
         Thread.sleep(3000);
 
 
-        // ==========================================
-        // 18. Print Cart URL
-        // ==========================================
+        //  Print Cart URL
 
-        System.out.println(
-                "Cart URL: " + driver.getCurrentUrl()
-        );
+        System.out.println("Cart URL: " + driver.getCurrentUrl());
 
 
-        // ==========================================
-        // 19. Print Cart Page Title
-        // ==========================================
+        //  Print Cart Page Title
 
         System.out.println(
                 "Cart Page Title: " + driver.getTitle()
         );
 
-
-        // ==========================================
-        // 20. Verify Cart Page
-        // ==========================================
+        //  Verify Cart Page
 
         if (driver.getCurrentUrl().contains("showCart")) {
 
@@ -346,13 +257,6 @@ public class NykaaTest {
                     "Cart page URL is different."
             );
         }
-
-
-        // ==========================================
-        // 21. Close Browser
-        // ==========================================
-
-        // driver.quit();
 
     }
 }
